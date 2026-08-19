@@ -1,0 +1,24 @@
+<Project>
+
+  <PropertyGroup>
+    <!--
+      net8.0 (LTS). El repositorio nacio como net5.0, pero .NET 5 dejo de tener
+      soporte en mayo de 2022 y ni OpenCvSharp4 ni Microsoft.ML.OnnxRuntime
+      publican ya assets para ese target.
+    -->
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OpenCvSharpVersion>4.10.0.20241108</OpenCvSharpVersion>
+    <OnnxRuntimeVersion>1.20.1</OnnxRuntimeVersion>
+  </PropertyGroup>
+
+</Project>

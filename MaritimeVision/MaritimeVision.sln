@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{26A695C8-4726-4789-9421-AEF6C6416A8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaritimeVision.Core", "src\MaritimeVision.Core\MaritimeVision.Core.csproj", "{52FD6765-2FDB-493F-BA3D-6305CDED6C43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaritimeVision.Cli", "src\MaritimeVision.Cli\MaritimeVision.Cli.csproj", "{3445BECE-6BB4-4FE5-A1DC-277C53108F97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaritimeVision.Web", "src\MaritimeVision.Web\MaritimeVision.Web.csproj", "{EC638DE3-6FD3-48F7-8A23-F7722ED0EBB3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A91CDFB5-D482-4732-B945-D58E86213ACB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaritimeVision.Tests", "tests\MaritimeVision.Tests\MaritimeVision.Tests.csproj", "{42286752-E8A9-4CE7-8766-4D095816E267}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{52FD6765-2FDB-493F-BA3D-6305CDED6C43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52FD6765-2FDB-493F-BA3D-6305CDED6C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52FD6765-2FDB-493F-BA3D-6305CDED6C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52FD6765-2FDB-493F-BA3D-6305CDED6C43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3445BECE-6BB4-4FE5-A1DC-277C53108F97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3445BECE-6BB4-4FE5-A1DC-277C53108F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3445BECE-6BB4-4FE5-A1DC-277C53108F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3445BECE-6BB4-4FE5-A1DC-277C53108F97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC638DE3-6FD3-48F7-8A23-F7722ED0EBB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC638DE3-6FD3-48F7-8A23-F7722ED0EBB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC638DE3-6FD3-48F7-8A23-F7722ED0EBB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC638DE3-6FD3-48F7-8A23-F7722ED0EBB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42286752-E8A9-4CE7-8766-4D095816E267}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42286752-E8A9-4CE7-8766-4D095816E267}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42286752-E8A9-4CE7-8766-4D095816E267}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42286752-E8A9-4CE7-8766-4D095816E267}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{52FD6765-2FDB-493F-BA3D-6305CDED6C43} = {26A695C8-4726-4789-9421-AEF6C6416A8C}
+		{3445BECE-6BB4-4FE5-A1DC-277C53108F97} = {26A695C8-4726-4789-9421-AEF6C6416A8C}
+		{EC638DE3-6FD3-48F7-8A23-F7722ED0EBB3} = {26A695C8-4726-4789-9421-AEF6C6416A8C}
+		{42286752-E8A9-4CE7-8766-4D095816E267} = {A91CDFB5-D482-4732-B945-D58E86213ACB}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MaritimeVision.Core</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="$(OnnxRuntimeVersion)" />
+    <PackageReference Include="OpenCvSharp4" Version="$(OpenCvSharpVersion)" />
+  </ItemGroup>
+
+  <!--
+    Los binarios nativos de OpenCV se referencian por RID. Se incluyen todos para
+    que la solucion funcione en Windows, Linux y macOS sin cambiar el csproj;
+    el runtime de .NET carga unicamente la carpeta runtimes/<RID> que corresponde.
+  -->
+  <ItemGroup>
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="$(OpenCvSharpVersion)" />
+    <PackageReference Include="OpenCvSharp4.runtime.linux-x64" Version="4.10.0.20240717" />
+    <PackageReference Include="OpenCvSharp4.runtime.osx_arm64" Version="4.8.1" />
+  </ItemGroup>
+
+</Project>
