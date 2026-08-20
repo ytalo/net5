@@ -48,14 +48,19 @@ aplicación .NET (un servicio, una app WPF, una función en la nube).
 
 ## Requisitos
 
-- **.NET 8 SDK** o superior.
+- **.NET 10 SDK** o superior.
 - Nada más: OpenCV y ONNX Runtime llegan como paquetes NuGet con sus binarios
   nativos para Windows, Linux y macOS.
 
 > **Sobre el *target framework*.** El repositorio nació en `net5.0`, pero .NET 5
 > dejó de tener soporte en mayo de 2022 y ni `OpenCvSharp4` ni
 > `Microsoft.ML.OnnxRuntime` publican ya *assets* para esa versión. La solución
-> apunta a `net8.0` (LTS), definido en un único sitio: `Directory.Build.props`.
+> apunta a `net10.0` (LTS, con soporte hasta noviembre de 2028), definido en un
+> único sitio: `Directory.Build.props`.
+>
+> Los dos paquetes nativos se consumen por su *asset* de `netstandard2.0`, que
+> `net10.0` carga sin cambios, así que subir de versión de .NET no obliga a tocar
+> código ni a esperar a que esos paquetes publiquen un *target* nuevo.
 
 ---
 
@@ -103,7 +108,7 @@ propio, no como solución final.
 
 ```bash
 dotnet build MaritimeVision.sln
-cd src/MaritimeVision.Cli/bin/Debug/net8.0
+cd src/MaritimeVision.Cli/bin/Debug/net10.0
 ```
 
 **Reproducir con las cajas dibujadas** (abre una ventana; espacio pausa, `q` cierra):
@@ -272,7 +277,7 @@ Ubuntu 24.04 o Debian 12 faltan librerías (`libavcodec.so.58`, `libtiff.so.5`,
 `libtesseract.so.4`...). Comprueba cuáles con:
 
 ```bash
-ldd bin/Debug/net8.0/runtimes/linux-x64/native/libOpenCvSharpExtern.so | grep "not found"
+ldd bin/Debug/net10.0/runtimes/linux-x64/native/libOpenCvSharpExtern.so | grep "not found"
 ```
 
 La salida más limpia es ejecutar en un contenedor basado en Ubuntu 22.04. En
