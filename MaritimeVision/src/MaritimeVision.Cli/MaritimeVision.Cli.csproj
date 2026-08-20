@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MaritimeVision.Cli</RootNamespace>
+    <AssemblyName>mvision</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../MaritimeVision.Core/MaritimeVision.Core.csproj" />
+  </ItemGroup>
+
+</Project>

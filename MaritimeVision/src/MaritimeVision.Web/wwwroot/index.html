@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MaritimeVision - deteccion de contenedores</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0e1116;
+      --panel: #161b22;
+      --border: #2a313c;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #2f81f7;
+      --ok: #3fb950;
+      --warn: #d29922;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    h1 { font-size: 19px; margin: 0; font-weight: 600; }
+    header p { margin: 0; color: var(--muted); font-size: 14px; }
+    main {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 20px;
+      padding: 20px 24px;
+      align-items: start;
+    }
+    @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .panel h2 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin: 0 0 14px;
+      font-weight: 600;
+    }
+    label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    input[type=text], input[type=file] {
+      width: 100%;
+      padding: 9px 10px;
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--text);
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px;
+      background: var(--accent);
+      border: 0;
+      border-radius: 7px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover:not(:disabled) { background: #4c9aff; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .divider {
+      margin: 18px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .divider span { position: relative; top: -9px; background: var(--panel); padding: 0 10px; }
+    #viewer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 380px;
+      background: #05070a;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    #viewer img { max-width: 100%; display: block; }
+    .placeholder { color: var(--muted); text-align: center; padding: 40px 20px; }
+    .status {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 7px;
+      font-size: 13px;
+      border: 1px solid var(--border);
+      background: #0d1117;
+    }
+    .status.ok { border-color: var(--ok); }
+    .status.warn { border-color: var(--warn); }
+    dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin: 0; font-size: 13px; }
+    dt { color: var(--muted); }
+    dd { margin: 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MaritimeVision</h1>
+    <p>Deteccion y seguimiento de contenedores maritimos &mdash; YOLO + ByteTrack sobre .NET</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Secuencia de video</h2>
+
+      <label for="file">Subir un fichero</label>
+      <input type="file" id="file" accept="video/*">
+      <button id="uploadBtn">Analizar el fichero subido</button>
+
+      <div class="divider"><span>o bien</span></div>
+
+      <label for="source">Ruta en el servidor, URL RTSP/HTTP o indice de camara</label>
+      <input type="text" id="source" placeholder="rtsp://camara.puerto.local/stream">
+      <button id="sourceBtn">Analizar este origen</button>
+
+      <div id="status" class="status">Comprobando el modelo...</div>
+    </section>
+
+    <section>
+      <div id="viewer">
+        <div class="placeholder">
+          Elige una secuencia para verla reproducida con las cajas de deteccion.
+        </div>
+      </div>
+      <div class="panel" id="metaPanel" style="margin-top:16px; display:none;">
+        <h2>Secuencia</h2>
+        <dl id="meta"></dl>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const viewer = $('viewer');
+    const status = $('status');
+
+    function setStatus(text, kind) {
+      status.textContent = text;
+      status.className = 'status' + (kind ? ' ' + kind : '');
+    }
+
+    async function checkModel() {
+      try {
+        const response = await fetch('/api/status');
+        const data = await response.json();
+        setStatus(data.message, data.modelAvailable ? 'ok' : 'warn');
+      } catch (error) {
+        setStatus('No se pudo consultar el estado del servidor: ' + error.message, 'warn');
+      }
+    }
+
+    async function showSummary(id) {
+      const meta = $('meta');
+      try {
+        const response = await fetch(`/api/sessions/${id}/summary`);
+        if (!response.ok) { return; }
+        const data = await response.json();
+        meta.innerHTML = '';
+        const rows = [
+          ['Resolucion', `${data.width} x ${data.height}`],
+          ['Fotogramas por segundo', data.fps],
+          ['Fotogramas', data.frames ?? 'en vivo'],
+          ['Duracion', data.durationSeconds ? data.durationSeconds.toFixed(1) + ' s' : 'en vivo'],
+        ];
+        for (const [key, value] of rows) {
+          meta.insertAdjacentHTML('beforeend', `<dt>${key}</dt><dd>${value}</dd>`);
+        }
+        $('metaPanel').style.display = 'block';
+      } catch { /* el resumen es informativo: si falla, la reproduccion sigue */ }
+    }
+
+    function play(session) {
+      // El parametro t evita que el navegador reutilice un flujo MJPEG anterior.
+      viewer.innerHTML = `<img alt="Reproduccion anotada" src="/api/sessions/${session.id}/stream?t=${Date.now()}">`;
+      setStatus(`Reproduciendo "${session.name}".`, 'ok');
+      showSummary(session.id);
+    }
+
+    async function post(url, options, button) {
+      button.disabled = true;
+      setStatus('Enviando la secuencia...');
+      try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        if (!response.ok) {
+          setStatus(data.error || 'La peticion fallo.', 'warn');
+          return;
+        }
+        play(data);
+      } catch (error) {
+        setStatus('Error de red: ' + error.message, 'warn');
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    $('uploadBtn').addEventListener('click', () => {
+      const file = $('file').files[0];
+      if (!file) {
+        setStatus('Selecciona primero un fichero de video.', 'warn');
+        return;
+      }
+      const body = new FormData();
+      body.append('video', file);
+      post('/api/sessions/upload', { method: 'POST', body }, $('uploadBtn'));
+    });
+
+    $('sourceBtn').addEventListener('click', () => {
+      const source = $('source').value.trim();
+      if (!source) {
+        setStatus('Escribe una ruta, una URL o un indice de camara.', 'warn');
+        return;
+      }
+      post('/api/sessions/source', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ source }),
+      }, $('sourceBtn'));
+    });
+
+    checkModel();
+  </script>
+</body>
+</html>
