@@ -2,11 +2,14 @@
 
   <PropertyGroup>
     <!--
-      net8.0 (LTS). El repositorio nacio como net5.0, pero .NET 5 dejo de tener
-      soporte en mayo de 2022 y ni OpenCvSharp4 ni Microsoft.ML.OnnxRuntime
-      publican ya assets para ese target.
+      net10.0 (LTS, soporte hasta noviembre de 2028). El repositorio nacio como
+      net5.0, que dejo de tener soporte en mayo de 2022 y para el que ni
+      OpenCvSharp4 ni Microsoft.ML.OnnxRuntime publican ya assets.
+
+      Los dos paquetes nativos se consumen por su asset de netstandard2.0, que
+      net10.0 carga sin cambios: la actualizacion no obliga a tocar codigo.
     -->
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
