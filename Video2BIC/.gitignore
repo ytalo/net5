@@ -1,0 +1,5 @@
+# Modelos ONNX y videos de prueba: son binarios grandes, no van al repositorio.
+models/*.onnx
+samples/*.mp4
+samples/*.avi
+out/
