@@ -1,0 +1,26 @@
+<Project>
+
+  <PropertyGroup>
+    <!--
+      Mismo target que MaritimeVision, cuya biblioteca Core se referencia desde
+      Video2BIC.Core para la deteccion y el seguimiento. La condicion permite
+      compilar con un SDK mas antiguo (TargetFramework=net8.0 dotnet build) sin
+      tocar el fichero.
+    -->
+    <TargetFramework Condition="'$(TargetFramework)' == ''">net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+
+  <!-- Las mismas versiones que MaritimeVision, para que NuGet no tenga que unificar. -->
+  <PropertyGroup>
+    <OpenCvSharpVersion>4.10.0.20241108</OpenCvSharpVersion>
+    <OnnxRuntimeVersion>1.20.1</OnnxRuntimeVersion>
+  </PropertyGroup>
+
+</Project>

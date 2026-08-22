@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Video2BIC.Cli</RootNamespace>
+    <AssemblyName>video2bic</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Video2BIC.Core/Video2BIC.Core.csproj" />
+  </ItemGroup>
+
+  <!--
+    Los binarios nativos de OpenCV se referencian por RID. Se incluyen los tres
+    para que la herramienta funcione en Windows, Linux y macOS sin tocar el
+    csproj; el runtime carga unicamente la carpeta runtimes/<RID> que corresponde.
+  -->
+  <ItemGroup>
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="$(OpenCvSharpVersion)" />
+    <PackageReference Include="OpenCvSharp4.runtime.linux-x64" Version="4.10.0.20240717" />
+    <PackageReference Include="OpenCvSharp4.runtime.osx_arm64" Version="4.8.1" />
+  </ItemGroup>
+
+</Project>

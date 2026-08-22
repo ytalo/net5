@@ -8,8 +8,13 @@
 
       Los dos paquetes nativos se consumen por su asset de netstandard2.0, que
       net10.0 carga sin cambios: la actualizacion no obliga a tocar codigo.
+
+      La condicion deja sobrescribir el target desde el entorno
+      (TargetFramework=net8.0 dotnet build) para poder compilar con un SDK mas
+      antiguo. Sin ella, Video2BIC, que referencia MaritimeVision.Core, no podria
+      hacerlo: el proyecto referenciado seguiria fijado a net10.0.
     -->
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework Condition="'$(TargetFramework)' == ''">net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
