@@ -174,9 +174,13 @@ public sealed class BicCodeParser
 
         void Evaluate(int corrections)
         {
-            if (corrections == 0)
+            // Con el digito de control exigido, una ventana sin correcciones ya se
+            // probo en el camino rapido y no cuadraba. Sin exigirlo hay que dejarla
+            // pasar: una lectura limpia cuyo digito de control falla es justo lo que
+            // se quiere ver al diagnosticar por que no se lee un contenedor, y es
+            // ademas el caso mas frecuente.
+            if (corrections == 0 && _options.RequireValidCheckDigit)
             {
-                // Ya se probo en el camino rapido y no cuadraba.
                 return;
             }
 

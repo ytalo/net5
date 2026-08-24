@@ -169,4 +169,49 @@ public class BicCodeParserTests
     public void RejectsAnImpossibleConfiguration()
         => Assert.Throws<InvalidOperationException>(
             () => new BicCodeParser(new BicParserOptions { MaxCorrections = -1 }));
+
+    /// <summary>
+    /// Sin exigir el digito de control, una lectura limpia cuyo control falla tiene
+    /// que aparecer: es el caso mas frecuente al diagnosticar por que no se lee un
+    /// contenedor, y el que dice «el OCR se comio un digito, mira aqui».
+    /// </summary>
+    [Fact]
+    public void SurfacesALiteralReadingWithABadCheckDigitWhenItIsNotRequired()
+    {
+        var parser = new BicCodeParser(new BicParserOptions { RequireValidCheckDigit = false });
+
+        // TGHU7654320 es el codigo valido; el OCR leyo un 5 donde habia un 3.
+        var candidates = parser.Parse("TGHU7654520");
+
+        var candidate = Assert.Single(candidates, item => item.Code.Value == "TGHU7654520");
+        Assert.Equal(0, candidate.Corrections);
+        Assert.False(candidate.HasValidCheckDigit);
+    }
+
+    /// <summary>
+    /// Exigiendo el digito de control -lo normal- esa misma lectura se descarta.
+    /// </summary>
+    [Fact]
+    public void DiscardsThatSameReadingWhenTheCheckDigitIsRequired()
+    {
+        var parser = new BicCodeParser();
+
+        Assert.DoesNotContain(parser.Parse("TGHU7654520"), item => item.Code.Value == "TGHU7654520");
+    }
+
+    /// <summary>
+    /// Una lectura limpia y correcta se sigue ofreciendo una sola vez, no dos, con
+    /// el digito de control desactivado.
+    /// </summary>
+    [Fact]
+    public void StillOffersAValidLiteralReadingExactlyOnce()
+    {
+        var parser = new BicCodeParser(new BicParserOptions { RequireValidCheckDigit = false });
+
+        var matches = parser.Parse("CSQU3054383").Where(item => item.Code.Value == "CSQU3054383").ToList();
+
+        var candidate = Assert.Single(matches);
+        Assert.Equal(0, candidate.Corrections);
+        Assert.True(candidate.HasValidCheckDigit);
+    }
 }
