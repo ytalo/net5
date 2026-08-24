@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Photo2BIC.Core</RootNamespace>
+    <AssemblyName>Photo2BIC.Core</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <!--
+    La norma ISO 6346, los reconocedores locales (Tesseract y CRNN/CTC en ONNX),
+    la localizacion de lineas con MSER y el preprocesado de recortes ya estaban
+    resueltos en Video2BIC.Core. Photo2BIC los reutiliza y aporta lo que no
+    existia: varios motores de reconocimiento intercambiables -incluidos
+    servicios remotos-, las variantes de preprocesado de una fotografia y el
+    consenso entre motores que sustituye a la votacion temporal del video.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="../../../Video2BIC/src/Video2BIC.Core/Video2BIC.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="$(OnnxRuntimeVersion)" />
+    <PackageReference Include="OpenCvSharp4" Version="$(OpenCvSharpVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Photo2BIC.Tests" />
+  </ItemGroup>
+
+</Project>

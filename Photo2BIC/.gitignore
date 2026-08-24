@@ -1,0 +1,6 @@
+# Modelos ONNX y fotografias de prueba: son binarios, no van al repositorio.
+models/*.onnx
+samples/*.jpg
+samples/*.jpeg
+samples/*.png
+out/

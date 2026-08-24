@@ -1,0 +1,27 @@
+<Project>
+
+  <PropertyGroup>
+    <!--
+      Mismo target que el resto del repositorio. Photo2BIC.Core referencia a
+      Video2BIC.Core (ISO 6346, reconocedores locales, localizacion de lineas),
+      asi que los tres proyectos tienen que compilar contra el mismo framework.
+      La condicion permite forzar otro (TargetFramework=net8.0 dotnet build) sin
+      tocar el fichero.
+    -->
+    <TargetFramework Condition="'$(TargetFramework)' == ''">net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+
+  <!-- Las mismas versiones que MaritimeVision y Video2BIC, para que NuGet no tenga que unificar. -->
+  <PropertyGroup>
+    <OpenCvSharpVersion>4.10.0.20241108</OpenCvSharpVersion>
+    <OnnxRuntimeVersion>1.20.1</OnnxRuntimeVersion>
+  </PropertyGroup>
+
+</Project>
